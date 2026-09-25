@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AQUA-CHEM | Water Quality Analyzer</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#eef6f8;
+    color:#17202a;
+}
+
+header{
+    background:linear-gradient(135deg,#00695c,#0277bd);
+    color:white;
+    padding:30px 15px;
+    text-align:center;
+}
+
+header h1{
+    font-size:36px;
+}
+
+header p{
+    margin-top:8px;
+    font-size:17px;
+}
+
+.container{
+    max-width:1050px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    margin-bottom:20px;
+    border-radius:16px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    margin-bottom:18px;
+    color:#00695c;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:15px;
+}
+
+label{
+    font-weight:bold;
+    display:block;
+    margin-bottom:5px;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #bbb;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    background:#00796b;
+    color:white;
+    border:none;
+    padding:13px 22px;
+    border-radius:9px;
+    cursor:pointer;
+    font-size:16px;
+    margin-top:15px;
+}
+
+button:hover{
+    background:#004d40;
+}
+
+.secondary{
+    background:#455a64;
+}
+
+.result{
+    margin-top:15px;
+    padding:15px;
+    border-radius:10px;
+    background:#f1f8e9;
+}
+
+.status{
+    font-weight:bold;
+    padding:5px 9px;
+    border-radius:5px;
+}
+
+.good{
+    color:#087f23;
+}
+
+.warning{
+    color:#d97706;
+}
+
+.bad{
+    color:#c62828;
+}
+
+.parameter{
+    margin:18px 0;
+}
+
+.bar-container{
+    height:20px;
+    background:#e0e0e0;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.bar{
+    height:100%;
+    width:0%;
+    background:#0288d1;
+    transition:width 1s;
+}
+
+.info{
+    background:#e3f2fd;
+    padding:15px;
+    border-left:5px solid #0288d1;
+    margin-top:15px;
+    border-radius:5px;
+}
+
+.report{
+    line-height:1.7;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#555;
+}
+
+@media print{
+
+    button,
+    footer{
+        display:none;
+    }
+
+    body{
+        background:white;
+    }
+
+    .card{
+        box-shadow:none;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<header>
+
+<h1>💧Water Analysis</h1>
+
+<p>Digital Water Quality Analysis System</p>
+
+<p> 🧪 Chemistry ⚗️</p>
+<p> Sanjivani College Of Engineering Kopargaon</p>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- SAMPLE INFORMATION -->
+
+<div class="card">
+
+<h2>📋 Sample Information</h2>
+
+<div class="grid">
+
+<div>
+
+<label>Sample Name</label>
+
+<input id="sampleName"
+placeholder="Example: Hostel Water">
+
+</div>
+
+
+<div>
+
+<label>Water Source</label>
+
+<select id="source">
+
+<option>Borewell</option>
+<option>Municipal Supply</option>
+<option>Well</option>
+<option>River</option>
+<option>Rainwater</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>Analysis Date</label>
+
+<input type="date" id="date">
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- parameters-->
+
+<div class="card">
+
+<h2>🧪 Water Parameters</h2>
+
+<div class="grid">
+
+
+<div>
+
+<label>pH</label>
+
+<input
+id="ph"
+type="number"
+step="0.01"
+placeholder="Example: 7.4">
+
+</div>
+
+
+<div>
+
+<label>TDS (mg/L)</label>
+
+<input
+id="tds"
+type="number"
+placeholder="Example: 350">
+
+</div>
+
+
+<div>
+
+<label>Chloride (mg/L)</label>
+
+<input
+id="chloride"
+type="number"
+placeholder="Example: 80">
+
+</div>
+
+
+<div>
+
+<label>Dissolved Oxygen (mg/L)</label>
+
+<input
+id="do"
+type="number"
+step="0.1"
+placeholder="Example: 6.5">
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- hardness of given water-->
+
+<div class="card">
+
+<h2>⚗️ Total Hardness — EDTA Method</h2>
+
+<div class="info">
+
+<b>Formula:</b>
+
+<br>
+
+Hardness =
+(V × M × 100000) / Vs
+
+<br><br>
+
+Where V = EDTA volume, M = EDTA molarity,
+and Vs = sample volume.
+
+</div>
+
+<div class="grid">
+
+<div>
+
+<label>EDTA Used (mL)</label>
+
+<input
+id="edta"
+type="number"
+step="0.1"
+placeholder="Example: 18">
+
+</div>
+
+
+<div>
+
+<label>EDTA Molarity (M)</label>
+
+<input
+id="edtaM"
+type="number"
+step="0.001"
+value="0.01">
+
+</div>
+
+
+<div>
+
+<label>Water Sample (mL)</label>
+
+<input
+id="sampleVolume"
+type="number"
+value="50">
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ALKALINITY -->
+
+<div class="card">
+
+<h2>🔬 Total Alkalinity — Titration</h2>
+
+<div class="info">
+
+<b>Formula:</b>
+
+<br>
+
+Alkalinity =
+(V × N × 50000) / Vs
+
+<br><br>
+
+Result is expressed as mg/L as CaCO₃.
+
+</div>
+
+<div class="grid">
+
+<div>
+
+<label>Acid Used (mL)</label>
+
+<input
+id="acidVolume"
+type="number"
+step="0.1"
+placeholder="Example: 12">
+
+</div>
+
+
+<div>
+
+<label>Acid Normality (N)</label>
+
+<input
+id="acidNormality"
+type="number"
+step="0.001"
+value="0.02">
+
+</div>
+
+
+<div>
+
+<label>Water Sample (mL)</label>
+
+<input
+id="alkSample"
+type="number"
+value="50">
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- Analyse section-->
+
+<div class="card">
+
+<h2>🔍 Analysis</h2>
+
+<p>
+Enter the laboratory measurements above and click the button.
+</p>
+
+<button onclick="analyzeWater()">
+
+🔍 ANALYZE WATER
+
+</button>
+
+<button class="secondary" onclick="window.print()">
+
+🖨️ PRINT REPORT
+
+</button>
+
+</div>
+
+
+
+<!-- RESULTS -->
+
+<div class="card" id="results" style="display:none">
+
+<h2>📊 Water Quality Report</h2>
+
+<div id="report" class="report"></div>
+
+</div>
+
+
+
+<!-- GRAPH -->
+
+<div class="card" id="graphCard" style="display:none">
+
+<h2>📈 Parameter Visualization</h2>
+
+<div id="bars"></div>
+
+</div>
+
+
+
+<!-- CHEMISTRY -->
+
+<div class="card">
+
+<h2>📖 Chemistry Behind the Analysis</h2>
+
+<div class="grid">
+
+
+<div class="info">
+
+<b>pH</b>
+
+<br><br>
+
+pH = −log₁₀[H⁺]
+<br><br>
+
+pH indicates the acidic or basic nature of water.
+
+</div>
+
+
+<div class="info">
+
+<b>Hardness</b>
+
+<br><br>
+
+Mainly caused by Ca²⁺ and Mg²⁺ ions.
+
+<br><br>
+
+EDTA forms complexes with these metal ions.
+
+</div>
+
+
+<div class="info">
+
+<b>Alkalinity</b>
+
+<br><br>
+
+Mainly related to:
+
+<br>
+
+OH⁻, CO₃²⁻ and HCO₃⁻
+
+</div>
+
+
+<div class="info">
+
+<b>TDS</b>
+
+<br><br>
+
+Total Dissolved Solids represent dissolved substances such as salts and minerals.
+
+</div>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<footer>
+
+Water Analyser <br>
+
+CIA Activity Project <br>
+Made By - 1.     2.   3.    4. <br>
+
+
+</footer>
+
+
+
+<script>
+
+
+// Set today's date automatically
+
+document.getElementById("date").value =
+new Date().toISOString().split("T")[0];
+
+
+
+// MAIN ANALYSIS FUNCTION
+
+function analyzeWater(){
+
+    let sampleName =
+    document.getElementById("sampleName").value || "Unnamed Sample";
+
+
+    let source =
+    document.getElementById("source").value;
+
+
+    let date =
+    document.getElementById("date").value;
+
+
+    let ph =
+    Number(document.getElementById("ph").value);
+
+
+    let tds =
+    Number(document.getElementById("tds").value);
+
+
+    let chloride =
+    Number(document.getElementById("chloride").value);
+
+
+    let oxygen =
+    Number(document.getElementById("do").value);
+
+
+
+    // HARDNESS CALCULATION
+
+    let edta =
+    Number(document.getElementById("edta").value);
+
+
+    let edtaM =
+    Number(document.getElementById("edtaM").value);
+
+
+    let sampleVolume =
+    Number(document.getElementById("sampleVolume").value);
+
+
+    let hardness = 0;
+
+
+    if(
+        edta > 0 &&
+        edtaM > 0 &&
+        sampleVolume > 0
+    ){
+
+        hardness =
+        (edta * edtaM * 100000)
+        / sampleVolume;
+
+    }
+
+
+
+    // ALKALINITY CALCULATION
+
+    let acidVolume =
+    Number(document.getElementById("acidVolume").value);
+
+
+    let acidNormality =
+    Number(document.getElementById("acidNormality").value);
+
+
+    let alkSample =
+    Number(document.getElementById("alkSample").value);
+
+
+    let alkalinity = 0;
+
+
+    if(
+        acidVolume > 0 &&
+        acidNormality > 0 &&
+        alkSample > 0
+    ){
+
+        alkalinity =
+        (acidVolume * acidNormality * 50000)
+        / alkSample;
+
+    }
+
+
+
+    // pH STATUS
+
+    let phStatus = getPHStatus(ph);
+
+
+    // HARDNESS STATUS
+
+    let hardnessStatus =
+    getHardnessStatus(hardness);
+
+
+    // TDS STATUS
+
+    let tdsStatus =
+    getTDSStatus(tds);
+
+
+    // CHLORIDE STATUS
+
+    let chlorideStatus =
+    getChlorideStatus(chloride);
+
+
+    // DO STATUS
+
+    let doStatus =
+    getDOStatus(oxygen);
+
+
+
+    // CREATE REPORT
+
+    let report = `
+
+    <h3>💧 ${sampleName}</h3>
+
+    <p>
+    <b>Source:</b> ${source}
+    </p>
+
+    <p>
+    <b>Date:</b> ${date}
+    </p>
+
+    <hr><br>
+
+
+    <p>
+    <b>pH:</b>
+    ${ph.toFixed(2)}
+    ${phStatus}
+    </p>
+
+
+    <p>
+    <b>Total Hardness:</b>
+    ${hardness.toFixed(2)}
+    mg/L as CaCO₃
+    ${hardnessStatus}
+    </p>
+
+
+    <p>
+    <b>Total Alkalinity:</b>
+    ${alkalinity.toFixed(2)}
+    mg/L as CaCO₃
+    </p>
+
+
+    <p>
+    <b>Chloride:</b>
+    ${chloride.toFixed(2)}
+    mg/L
+    ${chlorideStatus}
+    </p>
+
+
+    <p>
+    <b>TDS:</b>
+    ${tds.toFixed(2)}
+    mg/L
+    ${tdsStatus}
+    </p>
+
+
+    <p>
+    <b>Dissolved Oxygen:</b>
+    ${oxygen.toFixed(2)}
+    mg/L
+    ${doStatus}
+    </p>
+
+
+    <br>
+
+    <div class="info">
+
+    <b>🧠 Interpretation</b>
+
+    <br><br>
+
+    ${generateInterpretation(
+        ph,
+        hardness,
+        alkalinity,
+        tds,
+        chloride,
+        oxygen
+    )}
+
+    </div>
+
+    `;
+
+
+    document.getElementById("report").innerHTML =
+    report;
+
+
+    document.getElementById("results").style.display =
+    "block";
+
+
+    createBars(
+        ph,
+        hardness,
+        alkalinity,
+        chloride,
+        tds,
+        oxygen
+    );
+
+}
+
+
+
+// pH STATUS
+
+function getPHStatus(ph){
+
+    if(ph >= 6.5 && ph <= 8.5){
+
+        return `<span class="status good">✓ Within selected range</span>`;
+
+    }
+
+    return `<span class="status warning">⚠ Outside selected range</span>`;
+
+}
+
+
+
+// HARDNESS STATUS
+
+function getHardnessStatus(value){
+
+    if(value <= 200){
+
+        return `<span class="status good">✓ Relatively low</span>`;
+
+    }
+
+    if(value <= 300){
+
+        return `<span class="status warning">⚠ Moderately high</span>`;
+
+    }
+
+    return `<span class="status bad">⚠ High</span>`;
+
+}
+
+
+
+// TDS STATUS
+
+function getTDSStatus(value){
+
+    if(value <= 500){
+
+        return `<span class="status good">✓ Lower range</span>`;
+
+    }
+
+    if(value <= 1000){
+
+        return `<span class="status warning">⚠ Elevated</span>`;
+
+    }
+
+    return `<span class="status bad">⚠ High</span>`;
+
+}
+
+
+
+// CHLORIDE
+
+function getChlorideStatus(value){
+
+    if(value <= 250){
+
+        return `<span class="status good">✓ Lower range</span>`;
+
+    }
+
+    return `<span class="status warning">⚠ Elevated</span>`;
+
+}
+
+
+
+// DISSOLVED OXYGEN
+
+function getDOStatus(value){
+
+    if(value >= 5){
+
+        return `<span class="status good">✓ Good oxygen level</span>`;
+
+    }
+
+    if(value >= 3){
+
+        return `<span class="status warning">⚠ Moderate</span>`;
+
+    }
+
+    return `<span class="status bad">⚠ Low</span>`;
+
+}
+
+
+
+// INTERPRETATION
+
+function generateInterpretation(
+    ph,
+    hardness,
+    alkalinity,
+    tds,
+    chloride,
+    oxygen
+){
+
+    let messages = [];
+
+
+    if(ph < 6.5){
+
+        messages.push(
+        "Water is relatively acidic."
+        );
+
+    }
+
+    else if(ph > 8.5){
+
+        messages.push(
+        "Water is relatively alkaline."
+        );
+
+    }
+
+    else{
+
+        messages.push(
+        "pH is within the selected reference range."
+        );
+
+    }
+
+
+    if(hardness > 300){
+
+        messages.push(
+        "Hardness is high and may contribute to scaling."
+        );
+
+    }
+
+    else{
+
+        messages.push(
+        "Hardness is not highly elevated."
+        );
+
+    }
+
+
+    if(tds > 1000){
+
+        messages.push(
+        "TDS is elevated, indicating a higher concentration of dissolved substances."
+        );
+
+    }
+
+
+    if(oxygen < 3){
+
+        messages.push(
+        "Dissolved oxygen is relatively low."
+        );
+
+    }
+
+    else{
+
+        messages.push(
+        "Dissolved oxygen is at a reasonable measured level."
+        );
+
+    }
+
+
+    return messages.join("<br><br>");
+
+}
+
+
+
+// GRAPH
+
+function createBars(
+    ph,
+    hardness,
+    alkalinity,
+    chloride,
+    tds,
+    oxygen
+){
+
+    let parameters = [
+
+        ["pH", ph, 14],
+
+        ["Hardness", hardness, 500],
+
+        ["Alkalinity", alkalinity, 500],
+
+        ["Chloride", chloride, 500],
+
+        ["TDS", tds, 1000],
+
+        ["Dissolved Oxygen", oxygen, 10]
+
+    ];
+
+
+    let html = "";
+
+
+    parameters.forEach(item => {
+
+        let name = item[0];
+
+        let value = item[1];
+
+        let maximum = item[2];
+
+
+        let percentage =
+        Math.min((value / maximum) * 100,100);
+
+
+        html += `
+
+        <div class="parameter">
+
+        <b>
+        ${name}: ${value.toFixed(2)}
+        </b>
+
+        <div class="bar-container">
+
+        <div
+        class="bar"
+        style="width:${percentage}%">
+        </div>
+
+        </div>
+
+        </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("bars").innerHTML =
+    html;
+
+
+    document.getElementById("graphCard").style.display =
+    "block";
+
+}
+
+</script>
+
+</body>
+</html>
